@@ -25,7 +25,7 @@ export const AddTodo = ({ onAdd }: { onAdd: (title: string) => void }) => {
   }
 
   return (
-    <div className="toolbar">
+    <div className="add-bar">
       <form
         className="add-form"
         onSubmit={(e) => {
