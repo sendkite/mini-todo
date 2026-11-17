@@ -179,10 +179,16 @@ input:not([type]) {
   gap: var(--space-3);
   padding: var(--space-3) var(--space-2);
   border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: default;
+  transition: background-color var(--transition);
 
-  label {
+  &.is-selected {
+    background: var(--accent-bg);
+  }
+
+  .todo-title {
     flex: 1;
-    cursor: pointer;
     color: var(--text-h);
   }
 
@@ -211,7 +217,7 @@ input:not([type]) {
         center / contain no-repeat;
     }
 
-    &:checked + label {
+    &:checked + .todo-title {
       text-decoration: line-through;
       opacity: 0.5;
     }
