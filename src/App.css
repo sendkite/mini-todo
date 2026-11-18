@@ -201,6 +201,11 @@ input:not([type]) {
     background: var(--accent-bg);
   }
 
+  /* 클릭으로 받는 포커스는 선택 배경으로 이미 표시됨 */
+  &:focus {
+    outline: none;
+  }
+
   /* 체크 직후: 체크 표시를 잠깐 보여준 뒤 페이드아웃
      (총 0.5s = TodoItem.tsx의 LEAVE_DELAY_MS) */
   &.is-leaving {

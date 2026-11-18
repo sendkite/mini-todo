@@ -81,6 +81,16 @@ export const TodoItem = ({
         if ((e.target as HTMLElement).closest('input, button')) return
         onSelect(todo.id)
       }}
+      // 클릭하면 행에 포커스가 가도록 해서 키보드로 바로 조작할 수 있게 함
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        // 행 자체에 포커스가 있을 때만 (제목·날짜 입력 중의 Backspace는 무시)
+        if (e.target !== e.currentTarget || !selected) return
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+          e.preventDefault()
+          onDelete(todo.id)
+        }
+      }}
     >
       <input
         type="checkbox"
