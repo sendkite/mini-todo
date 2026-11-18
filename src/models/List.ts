@@ -1,3 +1,5 @@
+import { todayKey } from './date'
+import type { DateKey } from './date'
 import type { Todo } from './Todo'
 
 export class List {
@@ -23,16 +25,26 @@ export class List {
     return this.id === 'logbook'
   }
 
+  get isToday() {
+    return this.id === 'today'
+  }
+
   get canAdd() {
     return !this.isLogbook
   }
 
-  contains(todo: Todo) {
-    return this.isLogbook ? todo.done : todo.listId === this.id
+  // Today also gathers todos from any list that are due today or overdue
+  contains(todo: Todo, today: DateKey = todayKey()) {
+    if (this.isLogbook) return todo.done
+    if (this.isToday && (todo.isDueOn(today) || todo.isOverdue(today))) {
+      return true
+    }
+    return todo.listId === this.id
   }
 
-  openCount(todos: Todo[]) {
+  openCount(todos: Todo[], today: DateKey = todayKey()) {
     if (this.isLogbook) return undefined
-    return todos.filter((todo) => this.contains(todo) && !todo.done).length
+    return todos.filter((todo) => this.contains(todo, today) && !todo.done)
+      .length
   }
 }

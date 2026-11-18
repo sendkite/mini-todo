@@ -4,6 +4,7 @@ export interface RemoteTodo {
   title: string
   completed: boolean
   list_id: string
+  due_date: string | null // 'YYYY-MM-DD'
 }
 
 export interface RemoteList {

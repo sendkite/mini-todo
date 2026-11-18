@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchTodos } from '../api/todoGateway'
+import type { DateKey } from '../models/date'
 import { Todo } from '../models/Todo'
 
 const nextId = (todos: Todo[]) => Math.max(0, ...todos.map((t) => t.id)) + 1
@@ -28,8 +29,13 @@ export const useTodos = () => {
     )
   }
 
+  const setDueDate = (id: number, dueDate?: DateKey) =>
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? t.withDueDate(dueDate) : t)),
+    )
+
   const remove = (id: number) =>
     setTodos((prev) => prev.filter((t) => t.id !== id))
 
-  return { todos, add, toggle, rename, remove }
+  return { todos, add, toggle, rename, setDueDate, remove }
 }

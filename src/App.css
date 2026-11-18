@@ -198,6 +198,36 @@ input:not([type]) {
     min-width: 0;
   }
 
+  .due-date {
+    flex: none;
+    font-size: 13px;
+    color: var(--text);
+
+    &.is-today {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    &.is-overdue {
+      color: var(--danger);
+      font-weight: 600;
+    }
+  }
+
+  .due-date-input {
+    flex: none;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: transparent;
+    color-scheme: light dark;
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+
   /* round checkbox */
   input[type='checkbox'] {
     appearance: none;
