@@ -20,8 +20,16 @@ export const useTodos = () => {
   const toggle = (id: number) =>
     setTodos((prev) => prev.map((t) => (t.id === id ? t.toggled() : t)))
 
+  const rename = (id: number, title: string) => {
+    const trimmed = title.trim()
+    if (!trimmed) return
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id && t.title !== trimmed ? t.renamed(trimmed) : t)),
+    )
+  }
+
   const remove = (id: number) =>
     setTodos((prev) => prev.filter((t) => t.id !== id))
 
-  return { todos, add, toggle, remove }
+  return { todos, add, toggle, rename, remove }
 }

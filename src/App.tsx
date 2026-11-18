@@ -8,7 +8,7 @@ import { useTodos } from './hooks/useTodos'
 
 function App() {
   const { smartLists, projects, activeList, selectList } = useLists()
-  const { todos, add, toggle, remove } = useTodos()
+  const { todos, add, toggle, rename, remove } = useTodos()
 
   const visibleTodos = activeList
     ? todos.filter((todo) => activeList.contains(todo))
@@ -26,7 +26,12 @@ function App() {
 
       <main className="content">
         {activeList && <ListHeader list={activeList} />}
-        <TodoList todos={visibleTodos} onToggle={toggle} onDelete={remove} />
+        <TodoList
+          todos={visibleTodos}
+          onToggle={toggle}
+          onRename={rename}
+          onDelete={remove}
+        />
         {activeList?.canAdd && (
           <AddTodo onAdd={(title) => add(title, activeList.id)} />
         )}

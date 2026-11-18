@@ -11,6 +11,10 @@ export class Todo {
     this.listId = listId
   }
 
+  renamed(title: string) {
+    return new Todo(this.id, title, this.done, this.listId)
+  }
+
   toggled() {
     return new Todo(this.id, this.title, !this.done, this.listId)
   }

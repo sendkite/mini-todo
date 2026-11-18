@@ -190,6 +190,12 @@ input:not([type]) {
   .todo-title {
     flex: 1;
     color: var(--text-h);
+    user-select: none;
+  }
+
+  .todo-title-input {
+    flex: 1;
+    min-width: 0;
   }
 
   /* round checkbox */
