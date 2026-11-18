@@ -173,6 +173,20 @@ input:not([type]) {
   flex: 1;
 }
 
+/* Logbook day sections */
+.todo-group + .todo-group {
+  margin-top: var(--space-6);
+}
+
+.todo-group-title {
+  margin: 0;
+  padding: 0 var(--space-2) var(--space-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .todo-item {
   display: flex;
   align-items: center;
@@ -185,6 +199,20 @@ input:not([type]) {
 
   &.is-selected {
     background: var(--accent-bg);
+  }
+
+  /* 체크 직후: 체크 표시를 잠깐 보여준 뒤 페이드아웃
+     (총 0.5s = TodoItem.tsx의 LEAVE_DELAY_MS) */
+  &.is-leaving {
+    opacity: 0;
+    transition: opacity 0.2s ease 0.3s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &.is-leaving {
+      opacity: 1;
+      transition: none;
+    }
   }
 
   .todo-title {

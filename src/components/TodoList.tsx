@@ -1,18 +1,28 @@
 import { useState } from 'react'
+import { daysBetween, todayKey } from '../models/date'
 import type { DateKey } from '../models/date'
-import type { Todo } from '../models/Todo'
+import type { TodoGroup } from '../models/List'
 import { TodoItem } from './TodoItem'
 
 interface TodoListProps {
-  todos: Todo[]
+  groups: TodoGroup[]
   onToggle: (id: number) => void
   onRename: (id: number, title: string) => void
   onDueDateChange: (id: number, dueDate?: DateKey) => void
   onDelete: (id: number) => void
 }
 
+const formatGroupDate = (date: DateKey, today: DateKey) => {
+  const daysAgo = daysBetween(date, today)
+  if (daysAgo === 0) return '오늘'
+  if (daysAgo === 1) return '어제'
+  const [year, month, day] = date.split('-').map(Number)
+  const sameYear = date.slice(0, 4) === today.slice(0, 4)
+  return sameYear ? `${month}월 ${day}일` : `${year}년 ${month}월 ${day}일`
+}
+
 export const TodoList = ({
-  todos,
+  groups,
   onToggle,
   onRename,
   onDueDateChange,
@@ -21,19 +31,32 @@ export const TodoList = ({
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   return (
-    <ul className="todo-list">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onToggle={onToggle}
-          onRename={onRename}
-          onDueDateChange={onDueDateChange}
-          onDelete={onDelete}
-          selected={todo.id === selectedId}
-          onSelect={(id) => setSelectedId(id === selectedId ? null : id)}
-        />
+    <div className="todo-list">
+      {groups.map((group) => (
+        <section key={group.date ?? 'all'} className="todo-group">
+          {group.date && (
+            <h2 className="todo-group-title">
+              {formatGroupDate(group.date, todayKey())}
+            </h2>
+          )}
+          <ul>
+            {group.todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                onToggle={onToggle}
+                onRename={onRename}
+                onDueDateChange={onDueDateChange}
+                onDelete={onDelete}
+                selected={todo.id === selectedId}
+                onSelect={(id) =>
+                  setSelectedId(id === selectedId ? null : id)
+                }
+              />
+            ))}
+          </ul>
+        </section>
       ))}
-    </ul>
+    </div>
   )
 }

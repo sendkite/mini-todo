@@ -5,6 +5,7 @@ export interface RemoteTodo {
   completed: boolean
   list_id: string
   due_date: string | null // 'YYYY-MM-DD'
+  completed_at: string | null // ISO 8601 timestamp
 }
 
 export interface RemoteList {

@@ -24,14 +24,15 @@ Layered structure following Martin Fowler's "Modularizing React Apps". React is 
 
 `components → hooks → api → models` (`types.ts` holds backend response shapes and is only used by `api/`).
 
-- `models/` — plain classes with business rules and no UI/React imports. Instances are immutable (`Todo.toggled()` returns a new object). Rules live here, not in components: `List.contains(todo)`, `List.openCount(todos)`, `List.canAdd`.
+- `models/` — plain classes with business rules and no UI/React imports. Instances are immutable (`Todo.toggled()` returns a new object). Rules live here, not in components: `List.contains(todo)`, `List.groups(todos)`, `List.openCount(todos)`, `List.canAdd`.
 - `api/` — gateways (anti-corruption layer). They convert `Remote*` types (snake_case, e.g. `list_id`) into model instances. Currently backed by hardcoded sample data behind an async function; replace the body with `fetch()` without touching hooks or components.
-- `hooks/` — state and orchestration (`useTodos` owns the todo array and `add`/`toggle`/`remove`; `useLists` owns lists and the active list). All state is in memory, so a refresh resets to the sample data.
+- `hooks/` — state and orchestration (`useTodos` owns the todo array and `add`/`toggle`/`rename`/`setDueDate`/`remove`; `useLists` owns lists and the active list). All state is in memory, so a refresh resets to the sample data.
 - `components/` — presentational; receive models and callbacks via props and never fetch or branch on business rules. `App.tsx` only wires hooks to components.
 
 Domain behaviours worth knowing before editing:
 - A todo belongs to one list (`listId`). Sidebar counts are computed from open todos, not stored.
-- **Logbook** is a derived view: it shows completed todos from every list, has no count, and `canAdd` is false (the add button is hidden). Unchecking a todo there makes it vanish and return to its original list.
+- **Logbook** is a derived view: it shows completed todos from every list, has no count, and `canAdd` is false (the add button is hidden). Completed todos appear *only* there — checking a todo removes it from its list (and Today); unchecking it in Logbook returns it to its original list. Logbook is ordered by `Todo.completedAt` (newest first) and split into per-day sections by `List.groups()`; `toggled()` stamps/clears `completedAt`.
+- **Today** also shows open todos from any list whose `dueDate` is today or overdue (`Todo.isOverdue`). Dates are `'YYYY-MM-DD'` local-day strings (`models/date.ts`).
 
 ## Styling
 

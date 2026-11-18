@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { todayKey } from '../models/date'
 import type { DateKey } from '../models/date'
 import type { Todo } from '../models/Todo'
@@ -26,6 +26,9 @@ const dueDateClass = (todo: Todo, today: DateKey) => {
   return 'due-date'
 }
 
+// 체크 후 목록에서 사라지기까지의 시간. App.css의 .todo-item.is-leaving 페이드와 맞춰야 함
+const LEAVE_DELAY_MS = 500
+
 export const TodoItem = ({
   todo,
   onToggle,
@@ -36,6 +39,33 @@ export const TodoItem = ({
   onSelect,
 }: TodoItemProps) => {
   const [editing, setEditing] = useState(false)
+  // 체크한 뒤 실제 토글되기 전까지 화면에 보여줄 체크 상태 (null이면 대기 중 아님)
+  const [pendingDone, setPendingDone] = useState<boolean | null>(null)
+  const leaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => () => clearTimeout(leaveTimer.current), [])
+
+  const handleCheck = () => {
+    clearTimeout(leaveTimer.current)
+    // 대기 중에 다시 누르면 취소하고 원래 상태로
+    if (pendingDone !== null) {
+      setPendingDone(null)
+      return
+    }
+    setPendingDone(!todo.done)
+    leaveTimer.current = setTimeout(() => {
+      setPendingDone(null)
+      onToggle(todo.id)
+    }, LEAVE_DELAY_MS)
+  }
+
+  const itemClass = [
+    'todo-item',
+    selected && 'is-selected',
+    pendingDone !== null && 'is-leaving',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   const finishEditing = (title: string) => {
     setEditing(false)
@@ -44,7 +74,7 @@ export const TodoItem = ({
 
   return (
     <li
-      className={selected ? 'todo-item is-selected' : 'todo-item'}
+      className={itemClass}
       onClick={(e) => {
         // 체크박스·삭제 버튼·입력창 클릭, 더블클릭의 두 번째 클릭은 선택으로 취급하지 않음
         if (e.detail > 1) return
@@ -54,9 +84,9 @@ export const TodoItem = ({
     >
       <input
         type="checkbox"
-        checked={todo.done}
+        checked={pendingDone ?? todo.done}
         aria-label={`${todo.title} 완료`}
-        onChange={() => onToggle(todo.id)}
+        onChange={handleCheck}
       />
       {editing ? (
         <input

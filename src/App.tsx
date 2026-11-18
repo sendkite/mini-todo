@@ -10,9 +10,7 @@ function App() {
   const { smartLists, projects, activeList, selectList } = useLists()
   const { todos, add, toggle, rename, setDueDate, remove } = useTodos()
 
-  const visibleTodos = activeList
-    ? todos.filter((todo) => activeList.contains(todo))
-    : []
+  const groups = activeList ? activeList.groups(todos) : []
 
   return (
     <div className="app">
@@ -27,7 +25,7 @@ function App() {
       <main className="content">
         {activeList && <ListHeader list={activeList} />}
         <TodoList
-          todos={visibleTodos}
+          groups={groups}
           onToggle={toggle}
           onRename={rename}
           onDueDateChange={setDueDate}
