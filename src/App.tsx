@@ -1,4 +1,3 @@
-import './App.css'
 import { AddTodo } from './components/AddTodo'
 import { ListHeader } from './components/ListHeader'
 import { Sidebar } from './components/Sidebar'
@@ -13,7 +12,7 @@ function App() {
   const groups = activeList ? activeList.groups(todos) : []
 
   return (
-    <div className="app">
+    <div className="grid min-h-svh grid-cols-1 md:grid-cols-[240px_1fr]">
       <Sidebar
         smartLists={smartLists}
         projects={projects}
@@ -22,7 +21,7 @@ function App() {
         onSelect={selectList}
       />
 
-      <main className="content">
+      <main className="mx-auto flex w-full max-w-[720px] flex-col px-4 pt-6 md:px-6 md:pt-8">
         {activeList && <ListHeader list={activeList} />}
         <TodoList
           groups={groups}

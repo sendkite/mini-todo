@@ -36,8 +36,12 @@ Domain behaviours worth knowing before editing:
 
 ## Styling
 
-Plain global CSS, two files with a one-way dependency:
-- `src/index.css` — design tokens on `:root` (colors with a `prefers-color-scheme: dark` override, `--space-*`, `--radius-*`, `--transition`, fonts), base typography, `#root`.
-- `src/App.css` — reset, base form-control styles, accessibility rules, then the Things-style two-pane layout (`.sidebar`, `.content`, `.todo-item`, `.toolbar`). Uses CSS nesting. Always use the tokens rather than hardcoded values; app colors come from `--accent` / `--border` etc. so dark mode works automatically.
+Tailwind CSS v4 via `@tailwindcss/vite` (no `tailwind.config.js`; configuration is CSS-first). Components style themselves with utility classes; there is no per-component CSS.
 
-`App.css` is imported from `App.tsx` and loads after `index.css`, so equal-specificity rules in `App.css` win.
+`src/index.css` is the only stylesheet:
+- `@theme` holds the design tokens. The default color palette is cleared (`--color-*: initial`), so only app colors exist: `muted` (body text), `ink` (headings), `surface`, `sidebar`, `line` (borders), `accent`, `accent-soft`, `accent-line`, `danger`, `white`. Use them as `text-ink`, `border-line`, `bg-accent-soft`, etc. Also `text-meta` (13px), `rounded-sm` (6px), `md:` = 720px, default transition 200ms ease. Spacing uses Tailwind's default 4px scale.
+- Dark mode works by overriding the same `--color-*` variables in a `prefers-color-scheme: dark` block, so **don't use `dark:`** variants.
+- `@layer base` holds global rules (body colors, pointer cursor on buttons, `:focus-visible` outline); a global reduced-motion rule follows it.
+- Custom pieces: `field` utility (shared text-input style), `bg-check` (checkbox checkmark image), and the `hover-none:` variant (touch devices; Tailwind's `hover:`/`group-hover:` only apply on hover-capable devices).
+
+Conditional classes are built with `[...].filter(Boolean).join(' ')` (no `clsx`). State-dependent styling uses `group`/`peer`/`aria-*` variants where possible (e.g. sidebar `aria-[current=page]:`, checked todo title `peer-checked:line-through`).

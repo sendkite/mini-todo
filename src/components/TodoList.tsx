@@ -31,11 +31,11 @@ export const TodoList = ({
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   return (
-    <div className="todo-list">
+    <div className="flex-1">
       {groups.map((group) => (
-        <section key={group.date ?? 'all'} className="todo-group">
+        <section key={group.date ?? 'all'} className="not-first:mt-6">
           {group.date && (
-            <h2 className="todo-group-title">
+            <h2 className="border-b border-line px-2 pb-2 text-meta/tight font-semibold text-muted">
               {formatGroupDate(group.date, todayKey())}
             </h2>
           )}

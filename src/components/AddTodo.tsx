@@ -11,10 +11,10 @@ export const AddTodo = ({ onAdd }: { onAdd: (title: string) => void }) => {
 
   if (!open) {
     return (
-      <div className="toolbar">
+      <div className="sticky bottom-0 flex items-center bg-surface py-3">
         <button
           type="button"
-          className="add-button"
+          className="flex size-9 items-center justify-center rounded-full bg-accent text-[22px] leading-none text-white hover:brightness-110"
           aria-label="새 할 일"
           onClick={() => setOpen(true)}
         >
@@ -25,9 +25,9 @@ export const AddTodo = ({ onAdd }: { onAdd: (title: string) => void }) => {
   }
 
   return (
-    <div className="add-bar">
+    <div className="-order-1 flex border-b border-line pt-2 pb-3">
       <form
-        className="add-form"
+        className="flex flex-1"
         onSubmit={(e) => {
           e.preventDefault()
           onAdd(title)
@@ -36,6 +36,7 @@ export const AddTodo = ({ onAdd }: { onAdd: (title: string) => void }) => {
       >
         <input
           type="text"
+          className="field min-w-0 flex-1"
           autoFocus
           value={title}
           placeholder="새 할 일 (Enter로 추가, Esc로 닫기)"
