@@ -34,6 +34,10 @@ Domain behaviours worth knowing before editing:
 - **Logbook** is a derived view: it shows completed todos from every list, has no count, and `canAdd` is false (the add button is hidden). Completed todos appear *only* there — checking a todo removes it from its list (and Today); unchecking it in Logbook returns it to its original list. Logbook is ordered by `Todo.completedAt` (newest first) and split into per-day sections by `List.groups()`; `toggled()` stamps/clears `completedAt`.
 - **Today** also shows open todos from any list whose `dueDate` is today or overdue (`Todo.isOverdue`). Dates are `'YYYY-MM-DD'` local-day strings (`models/date.ts`).
 
+## Feature map
+
+`docs/feature-map.md` describes every user-facing feature from the user's side: which button to click, which keys to press, and the rules behind each (add, select, complete, rename, due date, delete, Logbook, shortcuts). Read it first when asked about UI behaviour, and update it in the same change whenever you add or alter a feature or shortcut.
+
 ## Styling
 
 Tailwind CSS v4 via `@tailwindcss/vite` (no `tailwind.config.js`; configuration is CSS-first). Components style themselves with utility classes; there is no per-component CSS.
