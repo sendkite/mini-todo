@@ -1,5 +1,6 @@
 import { AddTodo } from './components/AddTodo'
 import { ListHeader } from './components/ListHeader'
+import { ShortcutHelp } from './components/ShortcutHelp'
 import { Sidebar } from './components/Sidebar'
 import { TodoList } from './components/TodoList'
 import { useLists } from './hooks/useLists'
@@ -34,6 +35,8 @@ function App() {
           <AddTodo onAdd={(title) => add(title, activeList.id)} />
         )}
       </main>
+
+      <ShortcutHelp />
     </div>
   )
 }
